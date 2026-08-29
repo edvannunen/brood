@@ -2,7 +2,7 @@ const carousel = document.getElementById('carousel');
 const track = document.getElementById('carouselTrack');
 const slides = Array.from(track.children);
 
-const AUTO_ROTATE_MS = 4500;
+const AUTO_ROTATE_MS = 3000;
 let index = 0;
 let timer = null;
 
