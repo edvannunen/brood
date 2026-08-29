@@ -175,10 +175,13 @@ deployment" sections for the generic recipe this followed).
   general "almost always needs this overridden" note).
 - `ports_exposes` / Port field: `3000`.
 - Public repo, so `/applications/public`'s auto-attached "Public GitHub" pseudo-source needed
-  no GitHub App install — but that also means **auto-deploy-on-push is not wired up** (same
-  gap as SNOB2000/StrangeBrew/Fietsen) until the manual-webhook fix from the playbook's
-  "Static-site deployment" section step 7 is applied here too — not yet done as of first
-  deploy, so pushes need a manual redeploy (`POST /applications/{uuid}/start`) until then.
+  no GitHub App install — but that also meant auto-deploy-on-push wasn't wired up by default
+  (same gap as SNOB2000/StrangeBrew/Fietsen). Fixed the same way: `manual_webhook_secret_github`
+  set via the real API (encrypted-write path, not raw SQL — see the playbook's gotcha on that),
+  plus a repo-level GitHub webhook (`gh api repos/edvannunen/brood/hooks`) pointed at
+  `http://167.233.148.65:8000/webhooks/source/github/events/manual`. Verified end-to-end with
+  a real push (an empty commit): GitHub delivered it, Coolify's deployments list showed
+  `is_webhook: true` for that commit, deploy finished, site still live afterward.
 - Runtime env vars (set directly in Coolify, never committed): `LOGIN_USERNAME=BroodMetClau`,
   `LOGIN_PASSWORD=LekkerBakken`, `SESSION_SECRET` (a fresh random value generated for
   production — deliberately *not* the local dev `.env`'s value), `BASE_PATH=/brood`,
@@ -194,9 +197,11 @@ deployment" sections for the generic recipe this followed).
   nothing written to disk).
 - Verified live: `/brood` and `/brood/` both correctly redirect to the login page, login with
   the real credentials works, logout works, video/photo assets load.
-- **Not yet done**: the manual GitHub webhook (auto-deploy on push), and adding a tile for
-  Brood on `../Home`'s `index.html`/`style.css` (same pattern as the existing De Sprong /
-  1001 Albums / Fietsen / Strange Brew / Snob 2000 tiles) — needs a decision on tile artwork.
+- **Not yet done**: adding a tile for Brood on `../Home`'s `index.html`/`style.css` (same
+  pattern as the existing De Sprong / 1001 Albums / Fietsen / Strange Brew / Snob 2000 tiles)
+  — needs a decision on tile artwork. Also: the bretzel videos/photo are still uncompressed in
+  the repo (see the "Video compression" note above) — compress them with the same ffmpeg
+  recipe before ever wiring them back into `index.html`.
 
 Full server/infra details (Coolify API access from a fresh session, nginx config templates,
 webhook setup, general gotchas) live in `../Coolify Hosting Playbook.md` — check that file for
