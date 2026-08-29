@@ -141,10 +141,8 @@ a{color:inherit;}
 
 /* Logout link */
 .logout-link{
-  position:absolute;
-  top:16px;
-  right:20px;
-  z-index:10;
+  display:table;
+  margin:40px 0 0 auto;
   font-size:14px;
   font-weight:500;
   color:var(--ink);
