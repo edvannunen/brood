@@ -52,7 +52,7 @@ app.post('/login', (req, res) => {
   const { username = '', password = '' } = req.body;
   const ok = username.trim().toLowerCase() === USERNAME.toLowerCase() && password === PASSWORD;
   if (!ok) {
-    return res.redirect('/login?error=1');
+    return res.redirect(`${BASE_PATH}/login?error=1`);
   }
   res.cookie('auth', '1', {
     signed: true,
@@ -60,17 +60,17 @@ app.post('/login', (req, res) => {
     sameSite: 'lax',
     maxAge: THIRTY_DAYS_MS,
   });
-  res.redirect('/');
+  res.redirect(`${BASE_PATH}/`);
 });
 
 app.get('/logout', (req, res) => {
   res.clearCookie('auth');
-  res.redirect('/login');
+  res.redirect(`${BASE_PATH}/login`);
 });
 
 function requireAuth(req, res, next) {
   if (req.signedCookies.auth === '1') return next();
-  res.redirect('/login');
+  res.redirect(`${BASE_PATH}/login`);
 }
 
 app.get('/', requireAuth, (req, res) => {

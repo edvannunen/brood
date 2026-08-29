@@ -60,9 +60,10 @@ dashboard in production, matching every other project on this stack; `.env` loca
   Those are each served via their own explicit `app.get(...)` route in `server.js`, registered
   *before* the `requireAuth` catch-all — do not switch to a single `express.static(PUBLIC_DIR)`
   with no auth, that would serve every gated photo/video unauthenticated too.
-- `GET /logout` clears the cookie and redirects to `/login`. Linked from `index.html` top-right
-  (`.logout-link`, absolutely positioned — has its own background pill since it overlaps the
-  banner image otherwise, low contrast without it).
+- `GET /logout` clears the cookie and redirects. Linked from `index.html` bottom-right
+  (`.logout-link` — a normal right-aligned flow element at the end of `.wrap`, not
+  `position:absolute`; absolute-relative-to-viewport placement doesn't reliably land at the
+  bottom of a page taller than one screen).
 - **Why `public/` exists at all**: `express.static` only serves files inside the directory it's
   pointed at. Pointing it at the repo root would let anyone request `/server.js`, `/.env`,
   `/package.json` etc. directly and read them. Keep anything that shouldn't be servable (the
@@ -82,9 +83,25 @@ body{
 }
 ```
 
-Asset paths are plain relative (`img/...`) inside both `index.html` and `login.html` — no
-`<base href>` needed since `server.js` mounts everything at the app root (unlike the old
-static-nginx subpath setup this replaced).
+Asset paths are plain relative (`img/...`) inside both `index.html` and `login.html`.
+Deployed at `/brood` on a shared domain (see Deployment below), so `server.js` injects
+`<base href="{BASE_PATH}/">` server-side into both pages (`<!--BASE_HREF-->` placeholder,
+replaced on every request in `sendWithBaseHref()`) — `BASE_PATH` is empty locally, `/brood`
+in Coolify. **`<base>` only fixes browser-resolved relative URLs inside the HTML/CSS/JS**
+(`img src`, `link href`, relative `fetch()`). It does **nothing** for two other kinds of
+literal path in this app, both of which bit us on first deploy and needed separate fixes:
+- **Any HTML attribute that starts with `/`** — an absolute path is never relative-resolved,
+  `<base>` or not. `public/login.html`'s form `action` and `public/index.html`'s logout link
+  both had to change from `"/login"`/`"/logout"` to bare `"login"`/`"logout"` so they resolve
+  *through* the `<base>` tag instead of hitting the domain root.
+- **Every `res.redirect(...)` call in `server.js`** — an HTTP `Location` header, which
+  `<base>` can't touch at all since it's resolved by the browser with no HTML document in
+  play yet. All four redirects (`requireAuth`, both login outcomes, logout) are built as
+  `` `${BASE_PATH}/...` `` for exactly this reason — a bare `res.redirect('/login')` sent a
+  logged-out visitor to `bier-en-brood.nl/login` (404) instead of `bier-en-brood.nl/brood/login`
+  the moment this went live at the subpath, since Traefik had already stripped `/brood` before
+  the container ever saw the request, so the app had no way to know it wasn't mounted at the
+  domain root unless told via `BASE_PATH`.
 
 Videos are shown as plain `<video controls preload="none" poster="...">` elements (no custom
 player) — `preload="none"` matters since the videos are still sizeable even compressed. Each
@@ -141,36 +158,51 @@ npm start                # or: node server.js
 Then open `http://localhost:3000/` (redirects to `/login` if not authenticated). `PORT` env
 var controls the port, default 3000.
 
-## Deployment (planned, not yet live)
+## Deployment
 
-Not yet deployed to Coolify as of the auth rewrite (2026-08-29) — was originally planned as a
-static-site deploy (see the Coolify Hosting Playbook's static-site recipe) but that no longer
-applies now that this is a real Node app. Follow the **De Sprong**-style Node deploy pattern
-instead:
+**Live** at `https://bier-en-brood.nl/brood`, deployed 2026-08-29 via Coolify's API (same
+`/applications/public` + SSH pattern as SNOB2000/StrangeBrew, adapted for a Node app instead
+of a static site — see the Coolify Hosting Playbook's "Remote access" and "Static-site
+deployment" sections for the generic recipe this followed).
 
-- `build_pack: nixpacks` (auto-detected from `package.json`), not `static`.
-- Start command: `node server.js` (or `npm start`) — Coolify will very likely need this set
-  explicitly rather than relying on Nixpacks' guess, per the playbook's general gotchas.
-- Runtime env vars (set in Coolify's dashboard, **not** a committed `.env` — see `.env.example`
-  for the full list): `LOGIN_USERNAME`, `LOGIN_PASSWORD`, `SESSION_SECRET` (generate a real
-  random value, don't reuse the local dev one), `PORT` (match whatever Coolify's Port field is
-  set to).
-- Target URL: `https://bier-en-brood.nl/brood` — as a subdomain or Traefik-proxied subpath;
-  if subpath, this is a **Traefik-proxied dynamic Application now, not a static-nginx
-  resource**, so the "Custom Nginx Configuration" trick used by StrangeBrew/SNOB2000/Fietsen
-  for subpaths isn't available here — re-read the Coolify Hosting Playbook's "Subpath
-  deployments" gotcha section (the Traefik-strips-the-prefix behavior, and the relative-asset
-  trap) before wiring up the domain; a subdomain avoids all of that and is simpler.
-- No database, no persistent volume needed (auth is fully stateless — env vars + a signed
-  cookie, nothing written to disk).
-- Once live, add a tile for Brood on `../Home`'s `index.html`/`style.css` (same pattern as
-  the existing De Sprong / 1001 Albums / Fietsen / Strange Brew / Snob 2000 tiles) — not
-  done yet, needs a decision on tile artwork.
+- `build_pack: nixpacks` (auto-detected `package.json`), **not** `static` — this is a
+  **Traefik-proxied dynamic Application**, not an nginx-static resource, so the "Custom Nginx
+  Configuration" subpath trick StrangeBrew/SNOB2000/Fietsen use isn't available here. Traefik
+  strips the `/brood` prefix before the container sees anything (confirmed live, not just
+  theoretical) — see the "Design" section above for what that broke and how it was fixed
+  (`BASE_PATH` env var).
+- Start command: `node server.js` (Coolify's Nixpacks guess was overridden, per the playbook's
+  general "almost always needs this overridden" note).
+- `ports_exposes` / Port field: `3000`.
+- Public repo, so `/applications/public`'s auto-attached "Public GitHub" pseudo-source needed
+  no GitHub App install — but that also means **auto-deploy-on-push is not wired up** (same
+  gap as SNOB2000/StrangeBrew/Fietsen) until the manual-webhook fix from the playbook's
+  "Static-site deployment" section step 7 is applied here too — not yet done as of first
+  deploy, so pushes need a manual redeploy (`POST /applications/{uuid}/start`) until then.
+- Runtime env vars (set directly in Coolify, never committed): `LOGIN_USERNAME=BroodMetClau`,
+  `LOGIN_PASSWORD=LekkerBakken`, `SESSION_SECRET` (a fresh random value generated for
+  production — deliberately *not* the local dev `.env`'s value), `BASE_PATH=/brood`,
+  `PORT=3000`. Coolify also auto-added `NIXPACKS_NODE_VERSION=22` itself (harmless, consistent
+  with the committed `.node-version` pin).
+- Coolify IDs (stable, re-derive via the API if ever needed again): project uuid
+  `vn3weiqnz526k6ta1890wkuj`, production environment uuid `fr4sq684tfhw156a6j8f35t5`,
+  application uuid `onr4c8qpm0vos8n4gqp58lji`, server uuid `au56epv30lyah9047zzkurml`
+  (shared `localhost` server), destination uuid `xrn38nwb70ge0t1oooipqvf3` (shared `coolify`
+  docker network) — all the same shared server/destination every other project on this stack
+  uses.
+- No database, no persistent volume (auth is fully stateless — env vars + a signed cookie,
+  nothing written to disk).
+- Verified live: `/brood` and `/brood/` both correctly redirect to the login page, login with
+  the real credentials works, logout works, video/photo assets load.
+- **Not yet done**: the manual GitHub webhook (auto-deploy on push), and adding a tile for
+  Brood on `../Home`'s `index.html`/`style.css` (same pattern as the existing De Sprong /
+  1001 Albums / Fietsen / Strange Brew / Snob 2000 tiles) — needs a decision on tile artwork.
 
-Full server/infra details (Coolify IDs, nginx config templates, webhook setup, Node-specific
-gotchas like the `ORIGIN`/`BODY_SIZE_LIMIT` env vars De Sprong needed) live in
-`../Coolify Hosting Playbook.md` — check that file for anything deploy- or server-related,
-not duplicated here.
+Full server/infra details (Coolify API access from a fresh session, nginx config templates,
+webhook setup, general gotchas) live in `../Coolify Hosting Playbook.md` — check that file for
+anything deploy- or server-related, not duplicated here. Consider adding a "Brood" entry to
+that playbook's "Per-project specifics" section next time it's touched, matching how every
+sibling project documents its own IDs/quirks there rather than only in its own `CLAUDE.md`.
 
 ## Repo
 
