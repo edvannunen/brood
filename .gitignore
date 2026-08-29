@@ -2,7 +2,11 @@
 .DS_Store
 Thumbs.db
 
+# Node
+node_modules/
+.env
+
 # Working/source image files not used by the site directly
-img/brood_banner-achtergrond-groot.png
-img/brood_banner-achtergrondmiddel.png
-img/banner-groot - kopie.png
+public/img/brood_banner-achtergrond-groot.png
+public/img/brood_banner-achtergrondmiddel.png
+public/img/banner-groot - kopie.png
