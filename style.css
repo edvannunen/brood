@@ -80,16 +80,27 @@ a{color:inherit;}
 }
 .carousel-track::-webkit-scrollbar{display:none;}
 .carousel-track{scrollbar-width:none;}
-.carousel-track img{
+.carousel-track figure{
   flex:0 0 auto;
+  margin:0;
+  scroll-snap-align:center;
+}
+.carousel-track img{
   height:360px;
   width:auto;
   max-width:85vw;
   object-fit:cover;
-  scroll-snap-align:center;
   border:1px solid var(--line);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
+}
+.carousel-track figcaption{
+  margin-top:10px;
+  text-align:center;
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:15px;
+  color:var(--ink-soft);
 }
 @media (max-width:600px){
   .carousel-track img{height:260px;}
