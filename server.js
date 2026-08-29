@@ -47,6 +47,9 @@ app.get('/img/background.png', (req, res) => {
 app.get('/img/brood-favicon.png', (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, 'img', 'brood-favicon.png'));
 });
+app.get('/img/brood_socalmedia.png', (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, 'img', 'brood_socalmedia.png'));
+});
 
 app.post('/login', (req, res) => {
   const { username = '', password = '' } = req.body;
