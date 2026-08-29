@@ -27,8 +27,8 @@ function stopAuto() {
   timer = null;
 }
 
-carousel.querySelector('.carousel-prev').addEventListener('click', () => { prev(); startAuto(); });
-carousel.querySelector('.carousel-next').addEventListener('click', () => { next(); startAuto(); });
+carousel.querySelector('.carousel-prev').addEventListener('click', prev);
+carousel.querySelector('.carousel-next').addEventListener('click', next);
 carousel.addEventListener('mouseenter', stopAuto);
 carousel.addEventListener('mouseleave', startAuto);
 carousel.addEventListener('focusin', stopAuto);

@@ -30,6 +30,7 @@ a{color:inherit;}
 .wrap{max-width:1400px; margin:0 auto; padding:24px 24px 80px;}
 
 .section{margin-top:48px;}
+.section:first-child{margin-top:0;}
 
 .section-title{
   font-family:var(--font-display);
