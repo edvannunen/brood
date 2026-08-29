@@ -8,7 +8,11 @@ let timer = null;
 
 function goTo(i) {
   index = (i + slides.length) % slides.length;
-  slides[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  const slide = slides[index];
+  const trackRect = track.getBoundingClientRect();
+  const slideRect = slide.getBoundingClientRect();
+  const delta = (slideRect.left - trackRect.left) - (trackRect.width - slideRect.width) / 2;
+  track.scrollTo({ left: track.scrollLeft + delta, behavior: 'smooth' });
 }
 
 function next() { goTo(index + 1); }
