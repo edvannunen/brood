@@ -1,0 +1,114 @@
+:root{
+  --cream:#EFE6D6;
+  --cream-soft:#F7F1E4;
+  --ink:#1C2B41;
+  --ink-soft:#3E4E63;
+  --orange:#E8862E;
+  --orange-dark:#C96A1E;
+  --line:rgba(28,43,65,0.14);
+  --shadow:0 10px 30px -12px rgba(28,43,65,0.35);
+  --radius:16px;
+  --font-display:'Fraunces', serif;
+  --font-body:'Work Sans', -apple-system, sans-serif;
+}
+*{box-sizing:border-box;}
+html{overflow-x:hidden;}
+body{
+  margin:0;
+  overflow-x:hidden;
+  background:var(--cream) url(img/background.png) center/cover no-repeat fixed;
+  color:var(--ink);
+  font-family:var(--font-body);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%; display:block;}
+a{color:inherit;}
+
+.banner img{margin:0 auto; height:auto;}
+
+.wrap{max-width:1400px; margin:0 auto; padding:24px 24px 80px;}
+
+.section{margin-top:48px;}
+
+.section-title{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:28px;
+  color:var(--ink);
+  margin:0 0 20px;
+  text-align:center;
+}
+
+/* Videos */
+.video-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+@media (max-width:900px){
+  .video-grid{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:600px){
+  .video-grid{grid-template-columns:1fr;}
+}
+.video{
+  width:100%;
+  aspect-ratio:9/16;
+  object-fit:cover;
+  background:var(--ink);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+/* Carousel */
+.carousel{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.carousel-track{
+  display:flex;
+  gap:16px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;
+  padding:4px;
+  flex:1;
+}
+.carousel-track::-webkit-scrollbar{display:none;}
+.carousel-track{scrollbar-width:none;}
+.carousel-track img{
+  flex:0 0 auto;
+  height:360px;
+  width:auto;
+  max-width:85vw;
+  object-fit:cover;
+  scroll-snap-align:center;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+@media (max-width:600px){
+  .carousel-track img{height:260px;}
+}
+
+.carousel-arrow{
+  flex:0 0 auto;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:1px solid var(--line);
+  background:var(--cream-soft);
+  color:var(--ink);
+  font-size:16px;
+  cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.carousel-arrow:hover, .carousel-arrow:focus-visible{
+  box-shadow:var(--shadow);
+  border-color:var(--orange);
+  color:var(--orange-dark);
+}

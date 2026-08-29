@@ -1,0 +1,8 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Working/source image files not used by the site directly
+img/brood_banner-achtergrond-groot.png
+img/brood_banner-achtergrondmiddel.png
+img/banner-groot - kopie.png

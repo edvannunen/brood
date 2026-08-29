@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"d:\\\\Dropbox\\\\App\\\\Brood\" 2>&1; echo \"---\"; ls -la \"d:\\\\Dropbox\\\\App\" 2>&1)",
+      "Read(//d/Dropbox/App/**)",
+      "Read(//d/Dropbox/App/Home/**)"
+    ]
+  }
+}
