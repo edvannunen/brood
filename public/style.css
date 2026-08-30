@@ -82,11 +82,74 @@ a{color:inherit;}
   font-size:13px;
   color:var(--ink-soft);
 }
+.tab-note a{
+  color:var(--ink-soft);
+  text-decoration:underline;
+}
+.tab-note a:hover, .tab-note a:focus-visible{
+  color:var(--orange-dark);
+}
+.inspo-title + .tab-note{
+  margin-top:-8px;
+  margin-bottom:20px;
+}
 .tab-panel{
   border:1px solid var(--line);
   border-radius:var(--radius);
   background:rgba(247,241,228,0.5);
   padding:24px;
+}
+
+/* Inspiratie tab */
+.inspo-item{margin-top:40px;}
+.inspo-item:first-child{margin-top:0;}
+.inspo-title{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:28px;
+  color:var(--ink);
+  margin:0 0 20px;
+  text-align:center;
+}
+.book-thumbs{
+  display:flex;
+  justify-content:center;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.book-thumbs a{
+  display:block;
+  width:220px;
+  max-width:45%;
+  aspect-ratio:3/4;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.book-thumbs img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform .18s ease;
+}
+.book-thumbs a:hover img, .book-thumbs a:focus-visible img{
+  transform:scale(1.05);
+}
+.video-embed{
+  max-width:640px;
+  margin:0 auto;
+  aspect-ratio:16/9;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.video-embed iframe{
+  width:100%;
+  height:100%;
+  display:block;
+  border:0;
 }
 
 /* Videos */

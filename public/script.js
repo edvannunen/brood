@@ -95,7 +95,7 @@ function lightboxPrev() {
   showLightboxImage();
 }
 
-document.querySelectorAll('.photo-grid-2x2').forEach((grid) => {
+document.querySelectorAll('.photo-grid-2x2, .book-thumbs').forEach((grid) => {
   const links = Array.from(grid.querySelectorAll('a'));
   const images = links.map((a) => ({ src: a.getAttribute('href'), alt: a.querySelector('img').alt }));
   links.forEach((a, i) => {
