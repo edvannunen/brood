@@ -191,6 +191,9 @@ a{color:inherit;}
   box-shadow:var(--shadow);
   overflow:hidden;
 }
+.photo-grid-2x2.cols-3{
+  grid-template-columns:repeat(3,1fr);
+}
 .photo-grid-2x2 a{
   display:block;
   overflow:hidden;
