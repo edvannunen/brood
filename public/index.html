@@ -34,11 +34,41 @@
 <main class="wrap">
 
   <section class="section">
-    <h2 class="section-title">Brood bakken in drie delen</h2>
-    <div class="video-grid">
-      <figure class="video-figure"><figcaption>Na de autolyse</figcaption><video class="video" controls preload="none" poster="img/brood/broodbakken1-thumb.png" src="img/brood/broodbakken1.mp4"></video></figure>
-      <figure class="video-figure"><figcaption>Na de bulkrijs</figcaption><video class="video" controls preload="none" poster="img/brood/broodbakken2-thumb.png" src="img/brood/broodbakken2.mp4"></video></figure>
-      <figure class="video-figure"><figcaption>Vormen</figcaption><video class="video" controls preload="none" poster="img/brood/broodbakken3-thumb.png" src="img/brood/broodbakken3.mp4"></video></figure>
+    <div class="tabs" role="tablist" aria-label="Categorieën">
+      <button class="tab-btn" role="tab" type="button" id="tab-brood" aria-controls="panel-brood" aria-selected="true">Brood</button>
+      <button class="tab-btn" role="tab" type="button" id="tab-bretzels" aria-controls="panel-bretzels" aria-selected="false" tabindex="-1">Bretzels</button>
+      <button class="tab-btn" role="tab" type="button" id="tab-inspiratie" aria-controls="panel-inspiratie" aria-selected="false" tabindex="-1">Inspiratie</button>
+    </div>
+
+    <div class="tab-panel" id="panel-brood" role="tabpanel" aria-labelledby="tab-brood">
+      <h2 class="section-title">Brood bakken in drie delen</h2>
+      <div class="video-grid">
+        <figure class="video-figure"><figcaption>Na de autolyse</figcaption><video class="video" controls preload="none" poster="img/brood/broodbakken1-thumb.png" src="img/brood/broodbakken1.mp4"></video></figure>
+        <figure class="video-figure"><figcaption>Na de bulkrijs</figcaption><video class="video" controls preload="none" poster="img/brood/broodbakken2-thumb.png" src="img/brood/broodbakken2.mp4"></video></figure>
+        <figure class="video-figure"><figcaption>Vormen</figcaption><video class="video" controls preload="none" poster="img/brood/broodbakken3-thumb.png" src="img/brood/broodbakken3.mp4"></video></figure>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-bretzels" role="tabpanel" aria-labelledby="tab-bretzels" hidden>
+      <h2 class="section-title">Bretzels in de natriumloog (gootsteenontstopper)</h2>
+      <div class="video-grid">
+        <figure class="video-figure"><figcaption>Bretzels vormen</figcaption><video class="video" controls preload="none" poster="img/brood/bretzels1-thumb.png" src="img/brood/bretzels1.mp4"></video></figure>
+        <figure class="video-figure"><figcaption>In de gootsteenontstopper-oplossing</figcaption><video class="video" controls preload="none" poster="img/brood/bretzels3-thumb.png" src="img/brood/bretzels3.mp4"></video></figure>
+        <figure class="video-figure">
+          <figcaption>Bretzels of Pretzels</figcaption>
+          <div class="photo-grid-2x2" id="bretzelPhotoGrid">
+            <a href="img/brood/bretzel_004.jpg"><img src="img/brood/bretzel_004.jpg" alt="Bretzel" loading="lazy"></a>
+            <a href="img/brood/bretzel_005.jpg"><img src="img/brood/bretzel_005.jpg" alt="Bretzel" loading="lazy"></a>
+            <a href="img/brood/bretzel_006.jpg"><img src="img/brood/bretzel_006.jpg" alt="Bretzel" loading="lazy"></a>
+            <a href="img/brood/bretzel_007.jpg"><img src="img/brood/bretzel_007.jpg" alt="Bretzel" loading="lazy"></a>
+          </div>
+        </figure>
+      </div>
+      <p class="tab-note">Let op: Het is het beste om food-grade natriumhydroxide (vaak verkocht als &quot;bakkersloog&quot; of &quot;loogkristallen&quot;) te gebruiken. Geen gewone chemische gootsteenontstopper. Gebruik 40 gram per liter water.</p>
+    </div>
+
+    <div class="tab-panel" id="panel-inspiratie" role="tabpanel" aria-labelledby="tab-inspiratie" hidden>
+      <p class="tab-placeholder">Binnenkort: inspiratie.</p>
     </div>
   </section>
 
@@ -76,6 +106,13 @@
   <a href="logout" class="logout-link">Uitloggen</a>
 
 </main>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lightbox-close" type="button" aria-label="Sluiten">&times;</button>
+  <button class="lightbox-arrow lightbox-prev" type="button" aria-label="Vorige foto">&#10094;</button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <button class="lightbox-arrow lightbox-next" type="button" aria-label="Volgende foto">&#10095;</button>
+</div>
 
 <footer class="site-footer">
   &copy; <span id="year"></span> Ed van Nunen &middot; <a href="https://bier-en-brood.nl">bier-en-brood.nl</a>
