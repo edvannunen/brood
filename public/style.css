@@ -100,6 +100,76 @@ a{color:inherit;}
   padding:24px;
 }
 
+/* Recept tab */
+.recipe-block{margin-top:32px;}
+.recipe-block:first-child{margin-top:0;}
+.recipe-subtitle{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:20px;
+  color:var(--ink);
+  margin:0 0 12px;
+}
+.recipe-list{
+  margin:0;
+  padding-left:20px;
+  color:var(--ink-soft);
+  font-size:15px;
+  line-height:1.7;
+}
+.recipe-steps{
+  margin:0;
+  padding-left:20px;
+}
+.recipe-steps li{
+  margin-bottom:20px;
+}
+.recipe-steps li:last-child{
+  margin-bottom:0;
+}
+.recipe-steps strong{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:16px;
+  color:var(--ink);
+}
+.recipe-steps p{
+  margin:4px 0 0;
+  color:var(--ink-soft);
+  font-size:15px;
+  line-height:1.6;
+}
+.recipe-step{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.recipe-step-photos{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.recipe-step-photos a{
+  display:block;
+  height:150px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.recipe-step-photos img{
+  height:100%;
+  width:auto;
+  display:block;
+  transition:transform .18s ease;
+}
+.recipe-step-photos a:hover img, .recipe-step-photos a:focus-visible img{
+  transform:scale(1.08);
+}
+.recipe-step-photos-large a{
+  height:300px;
+}
+
 /* Inspiratie tab */
 .inspo-item{margin-top:40px;}
 .inspo-item:first-child{margin-top:0;}
