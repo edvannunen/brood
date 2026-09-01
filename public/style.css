@@ -27,7 +27,7 @@ a{color:inherit;}
 
 .banner img{margin:0 auto; height:auto;}
 
-.wrap{max-width:1400px; margin:0 auto; padding:24px 24px 80px;}
+.wrap{max-width:1400px; margin:0 auto; padding:24px 24px 0px;}
 
 .section{margin-top:48px;}
 .section:first-child{margin-top:0;}
@@ -166,8 +166,8 @@ a{color:inherit;}
 .recipe-step-photos a:hover img, .recipe-step-photos a:focus-visible img{
   transform:scale(1.08);
 }
-.recipe-step-photos-large a{
-  height:300px;
+.recipe-step-photos-125 a{
+  height:187.5px;
 }
 
 /* Inspiratie tab */
