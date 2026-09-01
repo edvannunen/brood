@@ -95,7 +95,7 @@ function lightboxPrev() {
   showLightboxImage();
 }
 
-document.querySelectorAll('.photo-grid-2x2, .book-thumbs, .recipe-step-photos').forEach((grid) => {
+document.querySelectorAll('.photo-grid-2x2, .book-thumbs').forEach((grid) => {
   const links = Array.from(grid.querySelectorAll('a'));
   const images = links.map((a) => ({ src: a.getAttribute('href'), alt: a.querySelector('img').alt }));
   links.forEach((a, i) => {
@@ -103,6 +103,15 @@ document.querySelectorAll('.photo-grid-2x2, .book-thumbs, .recipe-step-photos').
       e.preventDefault();
       openLightbox(images, i);
     });
+  });
+});
+
+const receptLinks = Array.from(document.querySelectorAll('#panel-recept .recipe-step-photos a'));
+const receptImages = receptLinks.map((a) => ({ src: a.getAttribute('href'), alt: a.querySelector('img').alt }));
+receptLinks.forEach((a, i) => {
+  a.addEventListener('click', (e) => {
+    e.preventDefault();
+    openLightbox(receptImages, i);
   });
 });
 
